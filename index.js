@@ -13,10 +13,12 @@ function toArray (cursorOrResult) {
 
 module.exports = function (r, options) {
   function create (done) {
+    console.log("rethinkdb-pool: create");
     return r.connect(options, done)
   }
 
   function destroy (connection) {
+    console.log("rethinkdb-pool: destroy");
     connection.close()
   }
 
@@ -38,6 +40,7 @@ module.exports = function (r, options) {
   var Promise = r._bluebird
 
   function acquire () {
+    console.log("rethinkdb-pool: acquire");
     return new Promise(function (resolve, reject) {
       pool.acquire(function (e, conn) {
         e ? reject(e) : resolve(conn)
@@ -46,6 +49,7 @@ module.exports = function (r, options) {
   }
 
   pool.run = function (query, opt, done) {
+    console.log("rethinkdb-pool: run: query=", query);
     if (typeof opt === 'function') {
       done = opt
       opt = null
